@@ -1,6 +1,6 @@
 """Learn the typical window size of each gesture, then guess gestures."""
 
-from features import window_sizes
+from features import WINDOW_LENGTH, window_sizes
 from signals import GESTURE_SIZE, make_signal
 
 
@@ -25,7 +25,14 @@ def predict(size, typical):
     return min(distances, key=distances.get)
 
 
-typical = {"rest": 0.08, "open": 0.32, "fist": 0.64}
-print(predict(0.5, typical))
-print(predict(0.2, typical))
-print(predict(0.5, {}))
+def evaluate(typical, seconds=20, seed=100, window_length=WINDOW_LENGTH):
+    """Return counts[true_gesture][guessed_gesture] on new signals."""
+    counts = {true: {guess: 0 for guess in typical} for true in typical}
+    for index, true_gesture in enumerate(typical):
+        gesture_seed = seed + index
+        signal = make_signal(true_gesture, seconds, gesture_seed)
+        sizes = window_sizes(signal, window_length)
+        for size in sizes:
+            guess = predict(float(size), typical)
+            counts[true_gesture][guess] += 1
+    return counts
