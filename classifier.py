@@ -13,3 +13,19 @@ def train(seconds=20, seed=0):
         sizes = window_sizes(signal)
         typical[gesture] = sizes.mean()
     return typical
+
+
+def predict(size, typical):
+    """Return the gesture whose typical size is closest to size."""
+    if not typical:
+        raise ValueError("No trained gestures. Run train() first.")
+    distances = {}
+    for gesture in typical:
+        distances[gesture] = abs(size - typical[gesture])
+    return min(distances, key=distances.get)
+
+
+typical = {"rest": 0.08, "open": 0.32, "fist": 0.64}
+print(predict(0.5, typical))
+print(predict(0.2, typical))
+print(predict(0.5, {}))
