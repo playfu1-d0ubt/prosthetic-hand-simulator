@@ -29,3 +29,9 @@ def test_negative_noise_floor_raises():
     """A negative noise floor should raise our own ValueError."""
     with pytest.raises(ValueError, match="noise_floor"):
         make_signal("rest", 2, noise_floor=-1)
+
+
+def test_signal_shorter_than_smoothing_raises():
+    """A signal shorter than the smoothing width should raise ValueError."""
+    with pytest.raises(ValueError, match="readings"):
+        make_signal("fist", 0.01)
