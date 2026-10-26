@@ -24,3 +24,16 @@ def window_sizes(signal, window_length=WINDOW_LENGTH):
     """Return the average absolute value of each window."""
     rows = split_windows(signal, window_length)
     return np.abs(rows).mean(axis=1)
+
+
+def window_roughness(signal, window_length=WINDOW_LENGTH):
+    """Return the roughness of each window: average jump divided by size."""
+    if window_length < 2:
+        raise ValueError(
+            f"Roughness needs a window of at least 2, got {window_length}."
+        )
+    rows = split_windows(signal, window_length)
+    jumps = np.diff(rows, axis=1)
+    avg_jump = np.abs(jumps).mean(axis=1)
+    avg_size = np.abs(rows).mean(axis=1)
+    return avg_jump / avg_size
