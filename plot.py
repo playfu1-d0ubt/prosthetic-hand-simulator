@@ -28,3 +28,14 @@ def make_comparison_figure():
     plot_sizes(ax_short, 5)
     fig.tight_layout()
     return fig
+
+
+def main():
+    """Save the comparison chart for the README."""
+    fig = make_comparison_figure()
+    fig.savefig("export/window_comparison.png", dpi=150, facecolor="white")
+    print("Saved export/window_comparison.png")
+
+
+if __name__ == "__main__":
+    main()
