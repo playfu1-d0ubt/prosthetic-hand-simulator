@@ -23,8 +23,8 @@ def main():
     """Run the whole simulator."""
     typical = train()
     print("Typical window size per gesture:")
-    for gesture, size in typical.items():
-        print(f"  {gesture}: {size:.2f}")
+    for gesture, (size, roughness) in typical.items():
+        print(f"  {gesture}: size {size:.2f}, roughness {roughness:.2f}")
     counts = evaluate(typical)
     print_table(counts)
 
