@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from features import window_roughness, window_sizes
+from features import window_features, window_roughness, window_sizes
 
 
 def test_window_sizes_known_answer():
@@ -30,3 +30,10 @@ def test_roughness_window_of_one_raises():
     """A window of 1 has no neighbours, so it should raise ValueError."""
     with pytest.raises(ValueError, match="at least 2"):
         window_roughness(np.array([1.0, 2.0, 3.0]), 1)
+
+
+def test_window_features_known_answer():
+    """Each window should give a [size, roughness] pair."""
+    signal = np.array([1, -1, 1, -1, 1, 1, 1, 1])
+    expected = [[1.0, 2.0], [1.0, 0.0]]
+    assert np.allclose(window_features(signal, 4), expected)

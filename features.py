@@ -37,3 +37,10 @@ def window_roughness(signal, window_length=WINDOW_LENGTH):
     avg_jump = np.abs(jumps).mean(axis=1)
     avg_size = np.abs(rows).mean(axis=1)
     return avg_jump / avg_size
+
+
+def window_features(signal, window_length=WINDOW_LENGTH):
+    """Return one row per window: [size, roughness]."""
+    sizes = window_sizes(signal, window_length)
+    roughness = window_roughness(signal, window_length)
+    return np.column_stack([sizes, roughness])
