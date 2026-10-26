@@ -5,10 +5,11 @@ A learning simulation that guesses a hand gesture (rest, open or fist) from a fa
 ## How it works
 
 1. Make a fake muscle signal for each gesture.
-2. Cut the signal into short windows and measure the average size of each window.
-3. Learn the typical window size for each gesture.
-4. Guess a new window by picking the gesture with the closest typical size.
-5. Score the guesses on new signals and print a results table.
+2. Give each gesture its own loudness and its own smoothness.
+3. Cut the signal into short windows and measure two things for each window: its average size and its roughness.
+4. Learn the typical size and roughness of each gesture.
+5. Guess a new window by picking the gesture with the closest typical pair.
+6. Score the guesses on new signals and print a results table.
 
 ![Window sizes for a long and a short window](export/window_comparison.png)
 
@@ -22,16 +23,29 @@ cd prosthetic-hand-simulator
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python main.py        # train, test and print results
-python plot.py        # save the comparison chart
-python -m pytest      # run the tests
+python main.py          # train, test and print results
+python plot.py          # save the comparison chart
+python noise_sweep.py   # accuracy as background noise rises
+python -m pytest        # run the tests
 ```
+## Harder signals
+
+Real muscle signals have background noise. `noise_floor` adds the same random noise to every gesture. As it rises, the quiet gestures drown in it.
+
+| Noise floor | Accuracy |
+| --- | --- |
+| 0.0 | 99% |
+| 0.3 | 99% |
+| 0.6 | 93% |
+| 1.0 | 78% |
+
+I also tried adding a second feature, roughness, hoping it would help. It did not. Size and roughness both come from the same noisy signal, so the noise hides both. Size alone scored 77%, roughness alone 72% and both together 78% at a noise floor of 1.0. A second measurement of the same noise cannot recover what the noise hides.
 
 ## Limitations
 
 - All data is fake. It is random noise, not real muscle signal, so real signals would be messier.
-- The 100% score is easy to get. The three gestures are far apart, so the task is too simple.
-- It uses one feature only: the average size of a window. Two gestures with the same loudness would look the same.
+- With no background noise the three gestures are far apart, so the task is easy.
+- It uses two features, size and roughness, but both come from the same signal, so noise hurts both.
 - A short window is quick but noisy. A long window is steady but slow to react.
 - It is a learning simulation, not a medical device.
 - Tested on Linux Mint only.
