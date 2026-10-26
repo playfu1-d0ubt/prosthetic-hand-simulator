@@ -55,3 +55,7 @@ I also tried adding a second feature, roughness, hoping it would help. It did no
 In Song Quiz, all my code was in one file. Here I split it into `signals.py`, which makes the fake signal, `features.py`, which turns the signal into one size number per window, and `classifier.py`, which learns the typical size of each gesture, guesses gestures and scores the guesses. This helped because it broke the project down into small groups of functions.
 
 The bug that caught me most was a missing `return`. I noticed because `len()` failed with a `TypeError`, since the function gave back `None`. I fixed it by adding `return` to the last line.
+
+I thought adding a second feature, roughness, would cancel out the noise. It did not, because roughness was generated from the same noisy signal as size. This taught me that testing a plan can show it was incorrect, and that is still a result.
+
+My tests helped when I moved the window functions around. They showed errors in how I moved the window cutting.
