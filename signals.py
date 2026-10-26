@@ -11,13 +11,16 @@ GESTURE_SIZE = {
 }
 
 
-def make_signal(gesture, seconds, seed=None):
+def make_signal(gesture, seconds, seed=None, noise_floor=0.0):
     """Return a fake muscle signal as a numpy array."""
-    n_reading = int(SAMPLE_RATE * seconds)
+    n_readings = int(SAMPLE_RATE * seconds)
     rng = np.random.default_rng(seed)
     if gesture not in GESTURE_SIZE:
         raise ValueError(
             f"Unknown gesture '{gesture}'. Use one of: {list(GESTURE_SIZE)}"
         )
+    if noise_floor < 0:
+        raise ValueError(f"noise_floor must be 0 or more, got {noise_floor}.")
     spread = GESTURE_SIZE[gesture]
-    return rng.normal(0, spread, n_reading)
+    signal = rng.normal(0, spread, n_readings)
+    return signal + rng.normal(0, noise_floor, n_readings)
