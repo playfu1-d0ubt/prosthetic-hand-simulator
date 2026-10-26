@@ -1,6 +1,7 @@
 """Tests for the fake signal generator."""
 
 import numpy as np
+import pytest
 
 from signals import SAMPLE_RATE, make_signal
 
@@ -16,3 +17,9 @@ def test_same_seed_same_signal():
     first = make_signal("open", 1, seed=5)
     second = make_signal("open", 1, seed=5)
     assert np.array_equal(first, second)
+
+
+def test_unknown_gesture_raises():
+    """A gesture name that does not exist should raise ValueError."""
+    with pytest.raises(ValueError):
+        make_signal("wave", 2)
