@@ -2,7 +2,7 @@
 
 import pytest
 
-from classifier import predict
+from classifier import evaluate, predict
 
 TYPICAL = {"rest": 0.08, "open": 0.32, "fist": 0.64}
 
@@ -18,3 +18,10 @@ def test_predict_empty_dict_raises():
     """An empty typical dict should raise ValueError."""
     with pytest.raises(ValueError):
         predict(0.5, {})
+
+
+def test_evaluate_counts_every_window():
+    """Each true gesture row should add up to the number of windows."""
+    counts = evaluate(TYPICAL, seconds=2)
+    for guesses in counts.values():
+        assert sum(guesses.values()) == 10
