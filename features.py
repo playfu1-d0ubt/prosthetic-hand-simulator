@@ -9,6 +9,8 @@ WINDOW_LENGTH = int(0.2 * SAMPLE_RATE)  # readings per window, 0.2 * SAMPLE_RATE
 
 def window_sizes(signal, window_length=WINDOW_LENGTH):
     """Return the average absolute value of each window."""
+    if window_length < 1:
+        raise ValueError(f"Window length must be at least 1, got {window_length}.")
     n_windows = len(signal) // window_length
     if n_windows == 0:
         raise ValueError(
