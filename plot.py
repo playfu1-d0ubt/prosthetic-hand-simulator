@@ -1,6 +1,6 @@
 """Draw charts of window sizes for each gesture."""
 
-import matplotlib.pyplot as plt  # noqa: F401
+import matplotlib.pyplot as plt
 import numpy as np
 
 from features import window_sizes
@@ -19,3 +19,12 @@ def plot_sizes(ax, window_length, seconds=20):
     ax.set_xlabel("Window size")
     ax.set_ylabel("Number of windows")
     ax.legend()
+
+
+def make_comparison_figure():
+    """Return a figure comparing a long window with a short window."""
+    fig, (ax_long, ax_short) = plt.subplots(1, 2, figsize=(10, 4))
+    plot_sizes(ax_long, 200)
+    plot_sizes(ax_short, 5)
+    fig.tight_layout()
+    return fig
