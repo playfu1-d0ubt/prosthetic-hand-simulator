@@ -1,6 +1,6 @@
 """Draw charts of window sizes for each gesture."""
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # noqa: F401
 import numpy as np
 
 from features import window_sizes
