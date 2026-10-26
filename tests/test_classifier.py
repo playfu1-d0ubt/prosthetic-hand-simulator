@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 
 from classifier import evaluate, predict
+from noise_sweep import accuracy
 
 TYPICAL = {
     "rest": np.array([0.08, 1.4]),
@@ -36,3 +37,9 @@ def test_predict_wrong_shape_raises():
     """A single number instead of a pair should raise ValueError."""
     with pytest.raises(ValueError, match="shape"):
         predict(0.5, TYPICAL)
+
+
+def test_accuracy_known_answer():
+    """Two right out of four should give 50 percent."""
+    counts = {"rest": {"rest": 1, "open": 1}, "open": {"rest": 1, "open": 1}}
+    assert accuracy(counts) == 50
