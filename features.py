@@ -7,8 +7,8 @@ from signals import SAMPLE_RATE
 WINDOW_LENGTH = int(0.2 * SAMPLE_RATE)  # readings per window, 0.2 * SAMPLE_RATE
 
 
-def window_sizes(signal, window_length=WINDOW_LENGTH):
-    """Return the average absolute value of each window."""
+def split_windows(signal, window_length):
+    """Cut a signal into rows, one row per whole window."""
     if window_length < 1:
         raise ValueError(f"Window length must be at least 1, got {window_length}.")
     n_windows = len(signal) // window_length
@@ -17,5 +17,10 @@ def window_sizes(signal, window_length=WINDOW_LENGTH):
             f"Signal has {len(signal)} readings, need at least {window_length}."
         )
     trimmed = signal[: n_windows * window_length]
-    rows = trimmed.reshape(n_windows, window_length)
+    return trimmed.reshape(n_windows, window_length)
+
+
+def window_sizes(signal, window_length=WINDOW_LENGTH):
+    """Return the average absolute value of each window."""
+    rows = split_windows(signal, window_length)
     return np.abs(rows).mean(axis=1)
