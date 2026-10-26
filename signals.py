@@ -10,6 +10,12 @@ GESTURE_SIZE = {
     "fist": 0.8,
 }
 
+GESTURE_SMOOTH = {
+    "rest": 1,
+    "open": 5,
+    "fist": 15,
+}
+
 
 def make_signal(gesture, seconds, seed=None, noise_floor=0.0):
     """Return a fake muscle signal as a numpy array."""
@@ -23,4 +29,7 @@ def make_signal(gesture, seconds, seed=None, noise_floor=0.0):
         raise ValueError(f"noise_floor must be 0 or more, got {noise_floor}.")
     spread = GESTURE_SIZE[gesture]
     signal = rng.normal(0, spread, n_readings)
+    width = GESTURE_SMOOTH[gesture]
+    kernel = np.ones(width) / width
+    signal = np.convolve(signal, kernel, mode="same") * np.sqrt(width)
     return signal + rng.normal(0, noise_floor, n_readings)
