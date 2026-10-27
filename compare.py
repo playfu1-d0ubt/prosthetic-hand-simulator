@@ -1,0 +1,19 @@
+"""Compare the typical-pair classifier with k-nearest-neighbour."""
+
+import numpy as np
+
+from features import window_features
+from signals import GESTURE_SIZE, make_signal
+
+
+def make_dataset(seconds=20, seed=0, noise_floor=0.0):
+    """Return (features, labels) with one row per window of every gesture."""
+    all_features = []
+    all_labels = []
+    for index, gesture in enumerate(GESTURE_SIZE):
+        gesture_seed = seed + index
+        signal = make_signal(gesture, seconds, gesture_seed, noise_floor=noise_floor)
+        features = window_features(signal)
+        all_features.extend(features)
+        all_labels.extend([gesture] * len(features))
+    return np.vstack(all_features), all_labels
