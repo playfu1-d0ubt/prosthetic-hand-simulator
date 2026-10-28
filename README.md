@@ -28,6 +28,7 @@ pip install -r requirements.txt
 python main.py          # train, test and print both tables
 python plot.py          # save the comparison chart
 python noise_sweep.py   # accuracy as background noise rises
+python demo.py          # show the hand reacting and save the GIF
 python -m pytest        # run the tests
 ```
  
@@ -43,6 +44,8 @@ python -m pytest        # run the tests
 | `main.py` | Trains, tests and prints the results tables |
 | `plot.py` | Saves the window-size comparison chart |
 | `noise_sweep.py` | Shows how accuracy falls as background noise rises |
+| `hand.py` | Draws a simple hand that opens and closes from an openness number |
+| `demo.py` | Turns a changing signal into openness values and animates the hand |
  
 ## Typical-pair accuracy
  
@@ -74,6 +77,14 @@ My guess is that neighbours do well on clean data, but averaging holds up better
  
 This is not enough to call. It is one pair of seeds and 300 synthetic test windows, so a 3 point gap is only about 9 windows.
  
+## Showing the hand
+
+`hand.py` draws a simple hand, and `demo.py` feeds it a signal that moves through rest, open and fist. The classifier guesses each 0.2 second window, and the hand opens or closes to match the guess.
+
+![The hand reacting to the demo signal](export/hand_demo.gif)
+
+Near the end of the fist stretch the hand twitches open for a moment. Those are windows the classifier guessed wrong, so it is the accuracy from the tables above shown as a hand.
+
 ## Limitations
  
 - All data is fake. It is random noise, not real muscle signal, so real signals would be messier.
@@ -81,6 +92,7 @@ This is not enough to call. It is one pair of seeds and 300 synthetic test windo
 - It uses two features, size and roughness, but both come from the same signal, so noise hurts both.
 - A short window is quick but noisy. A long window is steady but slow to react.
 - The classifier comparison uses one pair of seeds, so small gaps between the two are not reliable.
+- The hand is a simple drawing, not a model of a real prosthetic hand.
 - It is a learning simulation, not a medical device.
 - Tested on Linux Mint only.
 ## What I learned
@@ -94,3 +106,5 @@ I thought adding a second feature, roughness, would cancel out the noise. It did
 My tests helped when I moved the window functions around. They showed errors in how I moved the window cutting.
  
 When I compared the two classifiers, I learned that both had to be scored on the same training and test windows, or the comparison would not be fair. I also put a `return` inside a loop by mistake, which made a scorer give 0.33% instead of 99%, so I now check where my `return` lines sit.
+
+Animating the hand was the part I found hardest. I confused the function that creates the animation with the function that draws one frame, and I did not see why update had to sit inside make_animation. Once I thought of it as a flip book, where update draws one page and FuncAnimation flips through them, I could follow it. I also learned to keep the animation in a variable, or matplotlib throws it away.
