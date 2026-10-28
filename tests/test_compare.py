@@ -3,7 +3,7 @@
 import pytest
 
 from classifier import train
-from compare import make_dataset, percent_right, percent_right_knn
+from compare import compare_scores, make_dataset, percent_right, percent_right_knn
 
 
 def test_dataset_shapes_match():
@@ -48,3 +48,16 @@ def test_percent_right_knn_empty_labels():
     train_features, train_labels = make_dataset(seed=0)
     with pytest.raises(ValueError):
         percent_right_knn(train_features, train_labels, [], [])
+
+
+def test_compare_scores_in_range():
+    """Both scores should be between 0 and 100."""
+    typical_percent, knn_percent = compare_scores()
+    assert 0 <= typical_percent <= 100
+    assert 0 <= knn_percent <= 100
+
+
+def test_compare_scores_minus():
+    """compare_score(-1) should raise a ValueError"""
+    with pytest.raises(ValueError):
+        compare_scores(-1)

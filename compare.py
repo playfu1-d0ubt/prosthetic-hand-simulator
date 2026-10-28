@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from classifier import predict
+from classifier import predict, train
 from features import window_features
 from knn import predict_knn
 from signals import GESTURE_SIZE, make_signal
@@ -47,3 +47,15 @@ def percent_right_knn(train_features, train_labels, test_features, test_labels, 
         if guess == label:
             right += 1
     return 100 * right / len(test_labels)
+
+
+def compare_scores(noise_floor=0.0, k=3):
+    """Return (typical-pair percent, KNN percent) on the same test windows."""
+    typical = train(noise_floor=noise_floor)
+    train_features, train_labels = make_dataset(seed=0, noise_floor=noise_floor)
+    test_features, test_labels = make_dataset(seed=100, noise_floor=noise_floor)
+    typical_percent = percent_right(typical, test_features, test_labels)
+    knn_percent = percent_right_knn(
+        train_features, train_labels, test_features, test_labels, k
+    )
+    return typical_percent, knn_percent
