@@ -93,6 +93,7 @@ Near the end of the fist stretch the hand twitches open for a moment. Those are 
 - A short window is quick but noisy. A long window is steady but slow to react.
 - The classifier comparison uses one pair of seeds, so small gaps between the two are not reliable.
 - The hand is a simple drawing, not a model of a real prosthetic hand.
+- `demo.py` opens a window, so it needs a screen and will not run on a machine with no display.
 - It is a learning simulation, not a medical device.
 - Tested on Linux Mint only.
 ## What I learned
