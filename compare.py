@@ -4,6 +4,7 @@ import numpy as np
 
 from classifier import predict
 from features import window_features
+from knn import predict_knn
 from signals import GESTURE_SIZE, make_signal
 
 
@@ -32,3 +33,17 @@ def percent_right(typical, features, labels):
         if guess == label:
             right += 1
     return 100 * right / len(labels)
+
+
+def percent_right_knn(train_features, train_labels, test_features, test_labels, k=3):
+    """Return the percent of test windows k-nearest-neighbour guesses right."""
+    if len(test_labels) == 0:
+        raise ValueError("Invalid Value: test_labels is empty")
+    if len(test_labels) != len(test_features):
+        raise ValueError("Invalid Value: test_labels and test_features do not match")
+    right = 0
+    for row, label in zip(test_features, test_labels):
+        guess = predict_knn(row, train_features, train_labels, k)
+        if guess == label:
+            right += 1
+    return 100 * right / len(test_labels)

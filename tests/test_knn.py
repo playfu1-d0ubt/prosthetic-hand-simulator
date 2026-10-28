@@ -18,7 +18,7 @@ def test_knn_known_answer():
 
 def test_k_low():
     """k of less then 1 should raise a value error"""
-    with pytest.raises(ValueError, match="k needs to"):
+    with pytest.raises(ValueError, match="k must be at"):
         predict_knn(np.array([0.45]), EXAMPLES, LABELS, k=0.1)
 
 
