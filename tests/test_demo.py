@@ -1,10 +1,12 @@
 """Tests for the demo signal and openness values."""
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pytest
+from matplotlib.animation import FuncAnimation
 
 from classifier import train
-from demo import make_demo_signal, openness_per_window
+from demo import make_animation, make_demo_signal, openness_per_window
 from hand import GESTURE_OPENNESS
 
 
@@ -24,3 +26,20 @@ def test_empty_signal_raises():
     """Empty signal should raise a value error"""
     with pytest.raises(ValueError):
         openness_per_window(np.array([]), train())
+
+
+def test_make_animation_returns_animation():
+    """The animation should be a FuncAnimation object."""
+    fig, ax = plt.subplots()
+    anim = make_animation(fig, ax, [0.5, 1.0, 0.1])
+    assert isinstance(anim, FuncAnimation)
+    fig.canvas.draw()
+    plt.close(fig)
+
+
+def test_empty_values_raises():
+    """Empty values should raise a value error"""
+    with pytest.raises(ValueError):
+        fig, ax = plt.subplots()
+        make_animation(fig, ax, [])
+    plt.close(fig)
