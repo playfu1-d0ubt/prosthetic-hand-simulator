@@ -41,6 +41,19 @@ Real muscle signals have background noise. `noise_floor` adds the same random no
 
 I also tried adding a second feature, roughness, hoping it would help. It did not. Size and roughness both come from the same noisy signal, so the noise hides both. Size alone scored 77%, roughness alone 72% and both together 78% at a noise floor of 1.0. A second measurement of the same noise cannot recover what the noise hides.
 
+## Comparing two classifiers
+
+`compare.py` scores the typical-pair classifier and k-nearest-neighbour (k=3) on the same synthetic test windows. Run `python main.py` to print the table.
+
+| Noise floor | Typical-pair | KNN |
+|---|---|---|
+| 0.0 | 99% | 100% |
+| 0.3 | 99% | 100% |
+| 0.6 | 93% | 95% |
+| 1.0 | 78% | 75% |
+
+KNN was narrowly ahead from 0.0 to 0.6 (by 1 to 2 points), like 95% vs 93% at 0.6, the lead flipped somewhere between 0.6 and 1.0 and led 78% to 75%. my guess is neighbours do great on clean data but averaging holds up better once the noise gets nasty. but this is one pair of seeds and 300 synthetic test windows so a 3 point gap is only about 9 windows. not enough to call it
+
 ## Limitations
 
 - All data is fake. It is random noise, not real muscle signal, so real signals would be messier.
