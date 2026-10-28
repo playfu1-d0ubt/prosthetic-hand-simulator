@@ -23,12 +23,12 @@ cd prosthetic-hand-simulator
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python main.py          # train, test and print results
+python main.py          # train, test and print both tables
 python plot.py          # save the comparison chart
 python noise_sweep.py   # accuracy as background noise rises
 python -m pytest        # run the tests
 ```
-## Harder signals
+## Typical-pair accuracy
 
 Real muscle signals have background noise. `noise_floor` adds the same random noise to every gesture. As it rises, the quiet gestures drown in it.
 
